@@ -5,7 +5,7 @@ with Advanced Interactive Behavior Modeling</h3>
 [Tianyi Tan](https://github.com/0ttwhy4)\*, [Yinan Zheng](https://github.com/ZhengYinan-AIR)\*, [Ruiming Liang](https://github.com/LRMbbj), [Zexu Wang](https://github.com/ZexuWang), [Kexin Zheng](https://air-dream.netlify.app/author/kexin-zheng/), [Jinliang Zheng](https://github.com/2toinf), [Jianxiong Li](https://facebear-ljx.github.io/), [Xianyuan Zhan](https://zhanzxy5.github.io/zhanxianyuan/), [Jingjing Liu](https://air.tsinghua.edu.cn/en/info/1046/1194.htm)
 
 
-<!-- [**[Arxiv]**](https://arxiv.org/pdf/2501.15564) -->
+[**[Arxiv]**](https://arxiv.org/pdf/2510.11083)
 
 *The 39th Annual Conference on Neural Information Processing Systems (NeurIPS), 2025*
 
@@ -93,17 +93,21 @@ From the data modeling perspective, we propose **fine-grained trajectory tokeniz
 
 ## Getting Started
 
+### Fundamental setup
 ```
-# Fundamental setup
 conda create -n flow_planner python=3.9
 conda activate flow_planner
-
-# install nuplan-devkit
+```
+### install nuplan-devkit
+```
 git clone https://github.com/motional/nuplan-devkit.git && cd nuplan-devkit
 pip install -e .
 pip install -r requirements.txt
+```
 
-# flow planner setup
+### flow planner setup
+
+```
 cd ..
 git clone https://github.com/DiffusionAD/Flow-Planner.git && cd Flow-Planner
 pip install -e .
@@ -116,4 +120,23 @@ pip install -r requirements.txt
 2. Fill in the `flow_planner.script.data.dataset.nuplan_data.yaml` with generated file path.
 3. Launch training with `flow_planner/run_script/launch_train.sh`
 
-#### 
+## Bibtex
+
+If you find our code and paper can help, please cite our paper as:
+```
+@inproceedings{
+tan2025flow,
+title={Flow Matching-Based Autonomous Driving Planning with Advanced Interactive Behavior Modeling},
+author={Tianyi Tan and Yinan Zheng and Ruiming Liang and Zexu Wang and Kexin Zheng and Jinliang Zheng and Jianxiong Li and Xianyuan Zhan and Jingjing Liu},
+booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+year={2025}
+}
+
+@inproceedings{
+zheng2025diffusionbased,
+title={Diffusion-Based Planning for Autonomous Driving with Flexible Guidance},
+author={Yinan Zheng and Ruiming Liang and Kexin ZHENG and Jinliang Zheng and Liyuan Mao and Jianxiong Li and Weihao Gu and Rui Ai and Shengbo Eben Li and Xianyuan Zhan and Jingjing Liu},
+booktitle={The Thirteenth International Conference on Learning Representations},
+year={2025}
+}
+```
