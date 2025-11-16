@@ -1,0 +1,117 @@
+_target_: flow_planner.model.flow_planner_model.flow_planner.FlowPlanner
+
+neighbor_num: 32
+neighbor_pred_num: 0
+static_num: 5
+lane_num: 70
+
+cfg_neighbor_num: 10
+cfg_prob: 0.3
+cfg_weight: 1.8
+cfg_type: neighbors
+future_len: 80
+action_len: 20
+action_overlap: 10
+state_dim: 4
+model_type: x_start
+
+flow_ode:
+  _target_: flow_planner.model.flow_planner_model.flow_utils.flow_ode.FlowODE
+  path:
+    _target_: flow_matching.path.affine.AffineProbPath
+    scheduler:
+      _target_: flow_matching.path.scheduler.CondOTScheduler
+  time_sampler:
+    _target_: flow_planner.model.model_utils.time_sampler.TimeSampler
+    sample_method: uniform
+    device: ${device}
+    eps: 1e-3
+    alpha: 1.0
+    beta: 1.5  # this beta distribution shifts to early steps of denoising
+  cfg_weight: ${..cfg_weight}
+  sample_steps: 4
+  sample_method: midpoint
+  sample_temperature: 1.0
+
+assemble_method: average
+
+obs_normalizer:
+  _target_: flow_planner.data.normalization.obs_normalize.ObservationNormalizer
+  config: ${normalization_stats}
+state_normalizer:
+  _target_: flow_planner.data.normalization.state_normalize.StateNormalizer
+  config: ${normalization_stats}
+  future_downsampling_method: ${data.dataset.train.future_downsampling_method}
+  predicted_neighbor_num: ${data.dataset.train.predicted_neighbor_num}
+
+data_processor:
+  _target_: flow_planner.model.model_utils.input_preprocess.ModelInputProcessor
+  future_len: ${..future_len}
+  obs_normalizer: ${..obs_normalizer}
+  state_normalizer: ${..state_normalizer}
+  neighbor_pred_num: ${..neighbor_pred_num}
+
+model_encoder:
+  _target_: flow_planner.model.flow_planner_model.encoder.FlowPlannerEncoder
+  encoder_hidden_dim: 192
+  with_ego_history: false
+  neighbor_encoder:
+    _target_: flow_planner.model.modules.encoder_modules.AgentFusionEncoder
+    past_time_len: 21
+    drop_path_rate: 0.3
+    hidden_dim: ${..encoder_hidden_dim}
+    layer_num: 3
+    tokens_mlp_dim: 64
+    channels_mlp_dim: 128
+  static_encoder:
+    _target_: flow_planner.model.modules.encoder_modules.StaticFusionEncoder
+    static_objects_state_dim: 10
+    drop_path_rate: 0.3
+    hidden_dim: ${..encoder_hidden_dim}
+  lane_encoder:
+    _target_: flow_planner.model.modules.encoder_modules.LaneFusionEncoder
+    lane_points_num: 20
+    drop_path_rate: 0.3
+    hidden_dim: ${..encoder_hidden_dim}
+    layer_num: 3
+    tokens_mlp_dim: 64
+    channels_mlp_dim: 128
+  route_encoder:
+    _target_: flow_planner.model.modules.encoder_modules.RouteEncoder
+    route_num: 25
+    route_points_num: 20
+    drop_path_rate: 0.3
+    hidden_dim: ${model.model_decoder.hidden_dim}
+    tokens_mlp_dim: 32
+    channels_mlp_dim: 64
+  action_length: ${..action_len}
+  action_overlap: ${..action_overlap}
+  static_objects_num: 5
+  lane_num: 70
+  lane_dim: 12
+  neighbor_agent_num: 32
+  neighbor_pred_num: ${..neighbor_pred_num}
+  
+model_decoder:
+  _target_: flow_planner.model.flow_planner_model.decoder.FlowPlannerDecoder
+  hidden_dim: 256
+  t_embedder: 
+    _target_: flow_planner.model.modules.decoder_modules.TimestepEmbedder
+    hidden_size: ${model.model_decoder.hidden_dim}
+  depth: 4
+  agents_hidden_dim: ${..model_encoder.encoder_hidden_dim}
+  lane_hidden_dim: ${..model_encoder.encoder_hidden_dim}
+  heads: 8
+  enable_attn_dist: true
+  act_pe_type: "fixed_sin"
+  device: ${device}
+  neighbor_num: ${..neighbor_num}
+  neighbor_pred_num: ${..neighbor_pred_num}
+  static_num: ${..static_num}
+  lane_num: ${..lane_num}
+
+  cfg_neighbor_num: ${..cfg_neighbor_num}
+  future_len: ${..future_len}
+  action_len: ${..action_len}
+  action_overlap: ${..action_overlap}
+  state_dim: ${..state_dim}

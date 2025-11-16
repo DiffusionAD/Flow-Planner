@@ -1,0 +1,4 @@
+_target_: flow_planner.data.normalization.state_normalize.StateNormalizer
+config: ${normalization_stats}
+future_downsampling_method: ${data.dataset.train.future_downsampling_method}
+predicted_neighbor_num: ${data.dataset.train.predicted_neighbor_num}

@@ -1,0 +1,4 @@
+tensorboard:
+  _target_: flow_planner.recorder.tensorboard.TensorboardRecorder
+  save_path: ${oc.env:TENSORBOARD_LOG_PATH}
+  rank: ${oc.env:RANK}

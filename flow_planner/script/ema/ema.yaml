@@ -1,0 +1,3 @@
+_target_: timm.utils.ModelEma
+decay: 0.999
+device: ${device}

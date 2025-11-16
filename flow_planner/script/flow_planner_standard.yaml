@@ -1,0 +1,46 @@
+hydra:
+  run:
+    dir: ${save_dir}
+  job:
+    name: ${job_name}
+
+project_root: ${oc.env:PROJECT_ROOT}
+save_dir: ${oc.env:SAVE_DIR}/outputs/${project}/${job_name}/${now:%Y-%m-%d_%H-%M-%S}
+save_every_since: 0
+resume_path: null
+pretrained_checkpoint: null
+project: FlowPlannerTraining
+job_name: flow_planner_standard
+logger_level: info
+seed: 3402
+device: cuda
+num_workers: 4
+use_wandb: false
+pin_mem: true
+
+train:
+  batch_size: 2048
+  epoch: 400
+  save_utd: 20
+
+ddp:
+  distributed: true
+  world_size: ${oc.env:WORLD_SIZE}
+  rank: ${oc.env:LOCAL_RANK}
+  init_process_group: nccl
+  addr: ${oc.env:MASTER_ADDR, localhost}
+  port: ${oc.env:MASTER:PORT, 29529}
+
+model_type: x_start
+
+defaults:
+  - model: flow_planner
+  - core: flow_matching
+  - data/dataset: nuplan_data
+  - data/input_aug: input_aug
+  - normalization_stats: waypoints_norm_stats
+  - recorder: tensorboard
+  - optimizer: adamw
+  - scheduler: warmup_const
+  - ema: ema
+  - _self_

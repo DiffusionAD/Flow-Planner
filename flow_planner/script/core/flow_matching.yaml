@@ -1,0 +1,15 @@
+_target_: flow_planner.core.flow_matching_core.FlowMatchingCore
+
+device: ${device}
+
+input_aug:
+  _target_: flow_planner.data.augmentation.nuplan_augmentation.NuPlanAugment
+  state_aug:
+    _target_: flow_planner.data.augmentation.state_aug.StatePerturbation
+    augment_prob: 0.5
+  map_aug: null
+  device: ${device}
+
+ego_planning_loss: 1.0
+neighbor_pred_loss: 0.0
+consistency_loss: 0.5

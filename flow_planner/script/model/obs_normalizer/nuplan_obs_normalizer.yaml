@@ -1,0 +1,2 @@
+_target_: flow_planner.data.normalization.obs_normalize.ObservationNormalizer
+config: ${normalization_stats}

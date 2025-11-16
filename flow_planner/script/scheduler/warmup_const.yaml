@@ -1,0 +1,3 @@
+_target_: flow_planner.core.common.train_scheduler.CosineAnnealingWarmUpRestarts
+epoch: ${train.epoch}
+warm_up_epoch: 5

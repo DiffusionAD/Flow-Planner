@@ -1,0 +1,8 @@
+train:
+  _target_: flow_planner.data.dataset.nuplan.NuPlanDataset
+  data_dir: '/data/diffusion-planner-data/1M-balance-patch12k-250402'
+  data_list: '/data/diffusion-planner-data/jsons/1M-balance-patch12k-250402.json'
+  past_neighbor_num: ${model.neighbor_num}
+  predicted_neighbor_num: ${model.neighbor_pred_num}
+  future_len: ${model.future_len}
+  future_downsampling_method: uniform

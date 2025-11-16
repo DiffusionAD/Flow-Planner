@@ -1,0 +1,5 @@
+_target_: flow_planner.data.augmentation.nuplan_augmentation.NuPlanAugment
+state_aug:
+  _target_: flow_planner.data.augmentation.state_aug.StatePerturbation
+  augment_prob: 0.5
+device: ${device}

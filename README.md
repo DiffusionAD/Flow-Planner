@@ -91,6 +91,29 @@ From the data modeling perspective, we propose **fine-grained trajectory tokeniz
 
 </div>
 
-### Getting Started
+## Getting Started
 
-Coming soon...
+```
+# Fundamental setup
+conda create -n flow_planner python=3.9
+conda activate flow_planner
+
+# install nuplan-devkit
+git clone https://github.com/motional/nuplan-devkit.git && cd nuplan-devkit
+pip install -e .
+pip install -r requirements.txt
+
+# flow planner setup
+cd ..
+git clone https://github.com/DiffusionAD/Flow-Planner.git && cd Flow-Planner
+pip install -e .
+pip install -r requirements.txt
+```
+
+### To Launch Training
+
+1. Convert nuplan data into npz and generate corresponding data list json file as indicated in https://github.com/ZhengYinan-AIR/Diffusion-Planner.
+2. Fill in the `flow_planner.script.data.dataset.nuplan_data.yaml` with generated file path.
+3. Launch training with `flow_planner/run_script/launch_train.sh`
+
+#### 
