@@ -13,6 +13,27 @@ with Advanced Interactive Behavior Modeling</h3>
 
 The official implementation of *Flow Planner*, an advanced learning-based framework melding coordinated innovations in **data modeling**, **architecture design**, and **learning schemes** to enhance interactive driving behavior modeling for autonomous driving planning.
 
+<div style="display: flex; justify-content: center; align-items: center; gap: 2%;">
+
+  <img src="./assets/gif/nuplan/cutin.gif" width="32%" alt="Video 1">
+
+  <img src="./assets/gif/nuplan/ped.gif" width="32%" alt="Video 2">
+
+  <img src="./assets/gif/nuplan/right_turn.gif" width="32%" alt="Video 3">
+
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; gap: 2%;">
+
+  <img src="./assets/gif/interplan/nudge.gif" width="32%" alt="Video 1">
+
+  <img src="./assets/gif/interplan/jaywalk.gif" width="32%" alt="Video 2">
+
+  <img src="./assets/gif/interplan/car_crash.gif" width="32%" alt="Video 3">
+
+</div>
+
+
 ## Contents
 
 - [Methods](#methods)
@@ -119,6 +140,11 @@ pip install -r requirements.txt
 1. Convert nuplan data into npz and generate corresponding data list json file as indicated in https://github.com/ZhengYinan-AIR/Diffusion-Planner.
 2. Fill in the `flow_planner.script.data.dataset.nuplan_data.yaml` with generated file path.
 3. Launch training with `flow_planner/run_script/launch_train.sh`
+
+### To Launch Simulation
+
+1. Fill the `flow_planner/run_script/launch_sim_nuplan.sh` with corresponding path and task.
+2. To perform interPlan simulation, follow the instructions in https://github.com/mh0797/interPlan
 
 ## Bibtex
 

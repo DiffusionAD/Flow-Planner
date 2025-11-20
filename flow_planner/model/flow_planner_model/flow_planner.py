@@ -56,20 +56,7 @@ class FlowPlanner(DiffusionADPlanner):
     def prepare_model_input(self, cfg_flags, data: NuPlanDataSample, use_cfg, is_training):
         B = data.ego_current.shape[0]
 
-        if use_cfg and not is_training: # double the input data for cfg inference
-            # FIXME New behavior of NuPlanDataSample.repeat
-            data = data.repeat(2)
-            cfg_type = self.cfg_type
-            if cfg_type == 'neighbors':
-                neighbor_num = self.planner_params['neighbor_num']
-                cfg_neighbor_num = min(self.planner_params['cfg_neighbor_num'], neighbor_num)
-                mask_flags = cfg_flags.view(B * 2, *([1] * (data.neighbor_past.dim()-1))).repeat(1, neighbor_num, 1, 1)
-                mask_flags[:, cfg_neighbor_num:, :] = 1
-                data.neighbor_past *= mask_flags
-            elif cfg_type == 'lanes':
-                data.lanes = data.lanes * cfg_flags.view(B * 2, *([1] * (data.lanes.dim()-1)))
-        
-        else:
+        if is_training:
             # modify the data sample according to cfg_flags
             cfg_type = self.cfg_type
             if cfg_type == 'neighbors':
@@ -80,7 +67,20 @@ class FlowPlanner(DiffusionADPlanner):
                 data.neighbor_past *= mask_flags
             elif cfg_type == 'lanes':
                 data.lanes = data.lanes * cfg_flags.view(B, *([1] * (data.lanes.dim()-1)))
-                
+
+        else:
+            if use_cfg:
+                data = data.repeat(2)
+                cfg_type = self.cfg_type
+                if cfg_type == 'neighbors':
+                    neighbor_num = self.planner_params['neighbor_num']
+                    cfg_neighbor_num = min(self.planner_params['cfg_neighbor_num'], neighbor_num)
+                    mask_flags = cfg_flags.view(B * 2, *([1] * (data.neighbor_past.dim()-1))).repeat(1, neighbor_num, 1, 1)
+                    mask_flags[:, cfg_neighbor_num:, :] = 1
+                    data.neighbor_past *= mask_flags
+                elif cfg_type == 'lanes':
+                    data.lanes = data.lanes * cfg_flags.view(B * 2, *([1] * (data.lanes.dim()-1)))
+           
         model_inputs, gt = self.data_processor.sample_to_model_input(
             data, device=self.device, kinematic=self.kinematic, is_training=is_training
         )
@@ -156,7 +156,7 @@ class FlowPlanner(DiffusionADPlanner):
         loss = torch.sum(batch_loss, dim=-1) # (B, action_num, action_length, dim)
         loss_dict['ego_planning_loss'] = loss.mean()
 
-        if self.planner_params['action_overlap'] > 0: # TODO:
+        if self.planner_params['action_overlap'] > 0:
             consistency_loss = [torch.mean(torch.sum(self.basic_loss(prediction[:, i:i+1, -self.planner_params['action_overlap']:, :], prediction[:, i+1:i+2, :self.planner_params['action_overlap'], :]), dim=-1)) for i in range(0, prediction.shape[1]-2)]
             loss_dict['consistency_loss'] = sum(consistency_loss) / len(consistency_loss)
         else:

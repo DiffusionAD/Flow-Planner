@@ -13,8 +13,6 @@ import os
 import copy
 from flow_planner.train_utils.ddp import gather_tensor
 
-# TODO: decide whether to add device check
-
 @dataclass
 class NuPlanDataSample:
     '''

@@ -75,7 +75,7 @@ def resume_model(path: str, model, optimizer, scheduler, ema, device):
         wandb_id = None
 
     try:
-        ema.ema.load_state_dict({n.split("module.")[1]: v for n, v in ckpt['ema_state_dict'].items()})
+        ema.ema.load_state_dict({n: v for n, v in ckpt['ema_state_dict'].items()})
         ema.ema.eval()
         for p in ema.ema.parameters():
             p.requires_grad_(False)

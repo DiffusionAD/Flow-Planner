@@ -71,12 +71,8 @@ class JointAttention(Module):
     ):
         super().__init__()
         """
-        ein notation
-
-        b - batch
-        h - heads
-        n - sequence
-        d - feature dimension
+        Global attention of inputs features.
+        Reference implementation: https://github.com/lucidrains/mmdit
         """
 
         dim_inner = dim_head * heads
@@ -96,7 +92,7 @@ class JointAttention(Module):
 
         self.out_proj = ModuleList([nn.Linear(dim_inner, dim_input, bias = False) for dim_input in dim_inputs])
 
-        self.token_num = token_num # TODO: pass this as tunable parameter
+        self.token_num = token_num
 
         if enable_attn_dist:
             self.gen_taus = nn.Linear(dim_head * heads, self.token_num * heads)

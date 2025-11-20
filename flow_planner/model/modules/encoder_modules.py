@@ -7,8 +7,7 @@ from functools import partial
 from flow_planner.model.modules.decoder_modules import MixerBlock, SelfAttentionBlock
 from flow_planner.model.model_utils.tool_func import lanes_to_route_mask
 
-# TODO: remove the mask generation to pipeline
-    
+
 class AgentFusionEncoder(nn.Module):
     def __init__(self, past_time_len, drop_path_rate=0.3, hidden_dim=192, layer_num=3, tokens_mlp_dim=64, channels_mlp_dim=128):
         super().__init__()
@@ -18,7 +17,7 @@ class AgentFusionEncoder(nn.Module):
 
         self.type_emb = nn.Linear(3, channels_mlp_dim)
 
-        self.channel_pre_project = Mlp(in_features=8+1,  hidden_features=channels_mlp_dim, out_features=channels_mlp_dim, act_layer=nn.GELU, drop=0.) # wtf is '8+1' ?
+        self.channel_pre_project = Mlp(in_features=8+1,  hidden_features=channels_mlp_dim, out_features=channels_mlp_dim, act_layer=nn.GELU, drop=0.)
         self.token_pre_project = Mlp(in_features=past_time_len, hidden_features=tokens_mlp_dim, out_features=tokens_mlp_dim, act_layer=nn.GELU, drop=0.)
 
         self.blocks = nn.ModuleList([MixerBlock(tokens_mlp_dim, channels_mlp_dim, drop_path_rate) for i in range(layer_num)])

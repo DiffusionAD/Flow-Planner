@@ -13,10 +13,6 @@ class TimeSampler():
             sample_mathod {sample_method}'
 
     def sample(self, shape):
-        
-        # NOTE: For the compatibility of both diffusion and flow matching, 
-        # we follow the setting in diffusion where T=0 corresponds to the 
-        # ground truth and T=1 pure noise, (which is different from flow matching)
 
         if self.sample_method == 'uniform':
             t = torch.rand(shape, device=self.device) * (1 - self.eps) + self.eps

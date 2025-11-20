@@ -1,7 +1,7 @@
 train:
   _target_: flow_planner.data.dataset.nuplan.NuPlanDataset
-  data_dir: # TODO: path to the training .npz data folder
-  data_list: # TODO: path to the training .npz json file
+  data_dir: ${oc.env:TRAINING_DATA}
+  data_list: ${oc.env:TRAINING_JSON}
   past_neighbor_num: ${model.neighbor_num}
   predicted_neighbor_num: ${model.neighbor_pred_num}
   future_len: ${model.future_len}

@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-from torch import Tensor
 from timm.layers import Mlp
 from flow_planner.model.modules.decoder_modules import FinalLayer, PostFusion
 from flow_planner.model.model_utils.tool_func import sinusoidal_positional_encoding
@@ -66,7 +65,7 @@ class FlowPlannerDecoder(nn.Module):
         
         self.device = device
         
-        self.initialize_weights()
+        # self.initialize_weights()
 
     def load_action_pe(self, act_pe_type: str):
         if act_pe_type == 'learnable':
@@ -83,7 +82,6 @@ class FlowPlannerDecoder(nn.Module):
             raise ValueError(f'Unexpected action embedding type {act_pe_type}')
     
     def initialize_weights(self):
-        # TODO: complete initialization
         def basic_init(module):
             if isinstance(module, nn.Embedding):
                 nn.init.normal_(module.weight, mean=0.0, std=0.02)
@@ -109,8 +107,8 @@ class FlowPlannerDecoder(nn.Module):
             - 'masks': list of masks for different modalities, each with shape (B, neighbor, lane, static, token_num)
             - 'cfg_flags': tensor of shape (B,) indicating whether to use configuration flags
             - 'routes_cond': tensor of shape (B, hidden_dim) for route conditions
-            - 'obs_cond': tensor of shape       (B, neighbor, lane, static, hidden_dim) for observation conditions  
         '''
+
         B, P, _, _ = x.shape
         x = x.to(torch.float32)
         x = x.reshape(B, P, -1)
@@ -237,8 +235,8 @@ class FlowPlannerDiT(nn.Module):
     def __init__(
         self,
         *,
-        depth, # TODO
-        dim_modalities, # TODO
+        depth,
+        dim_modalities,
         enable_attn_dist = False,
         **block_kwargs
     ):

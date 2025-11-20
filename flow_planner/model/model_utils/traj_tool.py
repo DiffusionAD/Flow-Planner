@@ -25,6 +25,7 @@ def average_assemble(x, future_length, action_length, action_overlap, state_dim)
 def linear_assemble(x, future_length, action_length, action_overlap, state_dim):
     '''
     x: (B, N, L * D)
+    Linear weighting combination of overlapping segment
     '''
     B = x.shape[0]
     final_action = torch.zeros((B, 1, future_length, state_dim), device=x.device)

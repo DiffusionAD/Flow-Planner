@@ -159,24 +159,6 @@ class DataProcessor(object):
         agent_futures = agent_future_process(current_ego_state, future_tracked_objects_tensor_list, self.num_agents, agent_index)
 
         return agent_futures
-    
-    def plot_scenario(self, data, data_type):
-        # Create map layers
-        create_map_raster(data['lanes'], data['route_lanes'])
-
-        # Create agent layers
-        create_ego_raster(data['ego_agent_past'][-1], self._vehicle_parameters)
-        # create_agents_raster(data['neighbor_agents_past'][:, -1])
-
-        # Draw past and future trajectories
-        draw_trajectory(data['ego_agent_past'], data['neighbor_agents_past'])
-        draw_trajectory(data['ego_agent_future'], data['neighbor_agents_future'])
-
-        plt.gca().set_aspect('equal')
-        plt.tight_layout()
-        import time
-        plt.savefig(f'./img/image_{hash(time.time())}.png', dpi=600)
-        plt.clf()
 
     def save_to_disk(self, dir, data):
         np.savez(f"{dir}/{data['map_name']}_{data['token']}.npz", **data)

@@ -4,7 +4,6 @@ import numpy as np
 from flow_planner.data.dataset.nuplan import NuPlanDataSample
 
 def scale(x, scale, only_first=False):
-    # TODO: check if this is used
     if only_first:
         x_first, x_rest = x[:, :1], x[:, 1:]
         x = torch.cat([x_first * (1 + scale.unsqueeze(1)), x_rest], dim=1)

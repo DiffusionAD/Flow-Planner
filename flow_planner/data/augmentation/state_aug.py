@@ -78,7 +78,7 @@ class StatePerturbation():
         self,
         # device,
         augment_prob,
-        low: List[float] = [-0., -0.75, 0.2, -1, -0.5, -0.2, -0.1, 0., -0.],
+        low: List[float] = [-0., -0.75, -0.2, -1, -0.5, -0.2, -0.1, 0., -0.],
         high: List[float] = [0., 0.75, 0.2, 1, 0.5, 0.2, 0.1, 0., 0.],
         # augment_prob: float = 0.5,
         normalize=True,

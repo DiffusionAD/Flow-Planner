@@ -38,7 +38,7 @@ class ModelInputProcessor:
     ):
                 
         if self.obs_normalizer is not None:
-            model_inputs = self.obs_normalizer(data)
+            data = self.obs_normalizer(data)
 
         ego_future = data.ego_future
         if ego_future.numel() != 0:
